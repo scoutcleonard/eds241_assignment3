@@ -30,7 +30,8 @@ packages=c("stargazer",
            "datasets", 
            "tibble",
            "here",
-           "tidyverse")
+           "tidyverse",
+           "estimatr")
 
 for (i in packages) {
   if (require(i,character.only=TRUE)==FALSE) {
@@ -73,8 +74,27 @@ smoking_df <- read.csv(here("data", "SMOKING_EDS241.csv"))
 
 \noindent (a) What is the unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers? Under what hypothesis does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this hypothesis.
 
+*OH NOTES*
+If we are not adjusting on anything, what is the assumption 
+This is randomization of treatment, but unconditional randomization of treatment  
+Smoking status is randomly assigned between mothers - the assumption
+
+statitsical significance fodifference in birthweights does not tell you anything about random assignment of smoking treatment -> we need random assignment of smoking status
+
+Evidence: we need to show that any statistical difference between mothers that smoke and mothers that don't smoke -> run a model: income ~ tobacco, educ ~ tobacco, age ~ tobacco _are the means statitsically differnece for these?_ 
+provide some evidence that smoking is correlated with these variables . note the p values ! 
+
+hypothesis: testing that treatment is independent of potential outcomes.
+what would need to be true for the difference in weights to be the average treatment effect? 
+unconditional treatment ignorability 
+*END*
 ```{r}
-lm(birthwgt ~ tobacco, data = smoking_df)
+lm_robust(birthwgt ~ tobacco, data = smoking_df)
+```
+
+
+```{r}
+
 ```
 
 The unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers is -244.5 grams. 
@@ -87,6 +107,17 @@ Evidence against this hypothesis is that not all pregnancies and maternal health
 
 \noindent (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error.
 
+**OH NOTES**
+
+because it is conditional on the other variables, we include them all
+
+in order to get the ate, they need to be as factors. but here, maybe we do them linearly. 
+
+getting towards matching and conditioning on observables. 
+
+the simplest way to start controlling for the covarites is to linearly include them  
+
+**END**
 ```{r}
 # should we include the mage and meduc variables as.factor?? 
 mod <- lm_robust(birthwgt ~ tobacco + mage + meduc + as.factor(mblack) + as.factor(alcohol) + as.factor(first) + as.factor(diabete) + as.factor(anemia), data = smoking_df)
@@ -104,6 +135,7 @@ The average effect of maternal smoking on birth weight when all other covarients
 \noindent (c) Use the exact matching estimator to estimate the effect of maternal smoking on birth weight. For simplicity, consider the following covariates in your matching estimator: create a 0-1 indicator for mother's age (=1 if mage>=34), and a 0-1 indicator for mother's education (1 if meduc>=16), mother's race (mblack), and alcohol consumption indicator (alcohol). These 4 covariates will create 2*2*2*2 = 16 cells. Report the estimated average treatment effect of smoking on birthweight using the exact matching estimator and its linear regression analogue (Lecture 6, slides 12-14).
 
 ```{r}
+#create indicators for mage and meduc 
 smoking_df <- smoking_df %>% 
   mutate(mage_indicator = case_when(mage >= 34 ~ 1,
                                     mage < 34 ~ 0)) %>% 
@@ -111,11 +143,42 @@ smoking_df <- smoking_df %>%
                                      meduc < 16 ~ 0))
 ```
 
+**MAKE SURE u are running a fully saturated model google this**
+
 ```{r}
-#linear regression analogue -- what about exact matching estimator?? 
+#exact matching estimater 
 mod_2 <- lm_robust(birthwgt ~ tobacco + as.factor(mage_indicator) + as.factor(meduc_indicator) + as.factor(mblack) + as.factor(alcohol), data = smoking_df)
 
 mod_2
+
+#rewriting but interact stuff
+mod_2 <- lm_robust(birthwgt ~ tobacco + as.factor(mage_indicator) + as.factor(meduc_indicator) + as.factor(mblack) + as.factor(alcohol), data = smoking_df)
+#LINEAR REG ANALOGUE 
+#there should be 15
+mod_2 <- lm_robust(birthwgt ~  tobacco +
+                     as.factor(mage_indicator) + 
+                     as.factor(meduc_indicator) + 
+                     as.factor(mblack) + 
+                     as.factor(alcohol) + 
+                     tobacco:as.factor(mage_indicator) + 
+                     tobacco:as.factor(meduc_indicator) + 
+                     tobacco:as.factor(mblack) + 
+                     tobacco:as.factor(alcohol) +
+                     as.factor(mage_indicator):as.factor(meduc_indicator) +
+                     as.factor(mage_indicator):as.factor(mblack) +
+                     as.factor(mage_indicator):as.factor(alcohol) +
+                     as.factor(meduc_indicator):as.factor(mblack) +
+                     as.factor(meduc_indicator):as.factor(alcohol) +
+                     as.factor(mblack):as.factor(alcohol) +
+                     tobacco:as.factor(mage_indicator):as.factor(meduc_indicator) +
+                     tobacco:as.factor(mage_indicator):as.factor(mblack) +
+                     tobacco:as.factor(mage_indicator):as.factor(alcohol) +
+                     as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(mblack) +
+                     as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(alcohol) +
+                     as.factor(meduc_indicator):as.factor(mblack):as.factor(alcohol) +
+                     )
+
+#matching TIA pull from TIA table 
 ```
 
 The estimated average treatment effect of smoking on birthweight using the exact matching estimator is -226.76 grams lower for maternal smoking during pregnancy. 
