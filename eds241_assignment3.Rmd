@@ -125,3 +125,16 @@ It lin
 \newpage 
 
 \noindent (d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother’s age, mother’s age squared, mother’s education, and indicators for mother’s race, and alcohol consumption.
+
+```{r}
+# BASIC PROPENSITY SCORE --- THIS IS A TOY MODEL
+# ESTIMATE PROPENSITY SCORE MODEL AND PREDICT (EPS)
+ps_model <- glm(tobacco ~ mage + mage^2 + meduc + mblack + alcohol, family = binomial(), data = smoking_df)
+summary(ps_model)
+EPS <- predict(ps_model, type = "response")
+```
+
+\newpage
+
+\noindent (e) Use the propensity score weighted regression (WLS) to estimate the effect of maternal smoking on birth weight (Lecture 7, slide 12).
+
