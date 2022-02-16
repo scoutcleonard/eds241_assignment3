@@ -72,7 +72,11 @@ smoking_df <- read.csv(here("data", "SMOKING_EDS241.csv"))
 
 \newpage 
 
-\noindent (a) What is the unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers? Under what hypothesis does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this hypothesis.
+# Homework Questions
+
+## Part A
+
+\noindent What is the unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers? Under what assumption does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this hypothesis.
 
 *OH NOTES*
 If we are not adjusting on anything, what is the assumption 
@@ -89,23 +93,30 @@ what would need to be true for the difference in weights to be the average treat
 unconditional treatment ignorability 
 *END*
 ```{r}
-lm_robust(birthwgt ~ tobacco, data = smoking_df)
+mod_a1 <- lm_robust(birthwgt ~ tobacco, data = smoking_df)
+
+huxtable::huxreg(mod_a1)
 ```
 
+\noindent The unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers is -244.5 grams. 
+
+\noindent This tells us about the effect of smoking on infant birth weight assuming that mothers who smoke and mother who do not are statistically different. 
 
 ```{r}
+mod_a2 <- lm_robust(birthwgt ~ mblack, data = smoking_df)
 
+huxtable::huxreg(mod_a2)
 ```
 
-The unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers is -244.5 grams. 
-
-This corresponds to the alternative hypothesis that there is a difference between the infant birthweight between those with and without maternal smoking during pregnancy, holding all else equal regarding the mother's pregnancy and health. 
+\noindent 
 
 Evidence against this hypothesis is that not all pregnancies and maternal health is equal; a mother living in wealth who smokes might have a heavier baby than a mother who lives in poverty and does not smoke, for example, if socioeconomic status has an impact on infant birth weight. 
 
 \newpage
 
-\noindent (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error.
+## Part B
+
+\noindent Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error.
 
 **OH NOTES**
 
@@ -132,7 +143,12 @@ The average effect of maternal smoking on birth weight when all other covarients
 
 \newpage
 
-\noindent (c) Use the exact matching estimator to estimate the effect of maternal smoking on birth weight. For simplicity, consider the following covariates in your matching estimator: create a 0-1 indicator for mother's age (=1 if mage>=34), and a 0-1 indicator for mother's education (1 if meduc>=16), mother's race (mblack), and alcohol consumption indicator (alcohol). These 4 covariates will create 2*2*2*2 = 16 cells. Report the estimated average treatment effect of smoking on birthweight using the exact matching estimator and its linear regression analogue (Lecture 6, slides 12-14).
+## Part C
+
+\noindent Use the exact matching estimator to estimate the effect of maternal smoking on birth weight. For simplicity, consider the following covariates in your matching estimator: create a 0-1 indicator for mother's age (=1 if mage>=34), and a 0-1 indicator for mother's education (1 if meduc>=16), mother's race (mblack), and alcohol consumption indicator (alcohol). These 4 covariates will create 2*2*2*2 = 16 cells. Report the estimated average treatment effect of smoking on birthweight using the exact matching estimator and its linear regression analogue (Lecture 6, slides 12-14).
+
+
+\noindent The code chunk below creates 0-1 indicators for mother's education and mother's age.
 
 ```{r}
 #create indicators for mage and meduc 
@@ -143,51 +159,45 @@ smoking_df <- smoking_df %>%
                                      meduc < 16 ~ 0))
 ```
 
-**MAKE SURE u are running a fully saturated model google this**
+```{r}
+#matching TIA pull from TIA table 
+
+```
+
+\noindent The code chunk below generates the linear regression analogue to estimate the effect of smoking on birth weight. 
 
 ```{r}
-#exact matching estimater 
-mod_2 <- lm_robust(birthwgt ~ tobacco + as.factor(mage_indicator) + as.factor(meduc_indicator) + as.factor(mblack) + as.factor(alcohol), data = smoking_df)
-
-mod_2
-
-#rewriting but interact stuff
-mod_2 <- lm_robust(birthwgt ~ tobacco + as.factor(mage_indicator) + as.factor(meduc_indicator) + as.factor(mblack) + as.factor(alcohol), data = smoking_df)
 #LINEAR REG ANALOGUE 
-#there should be 15
-mod_2 <- lm_robust(birthwgt ~  tobacco +
+mod_B <- lm_robust(birthwgt ~  tobacco +
                      as.factor(mage_indicator) + 
                      as.factor(meduc_indicator) + 
                      as.factor(mblack) + 
                      as.factor(alcohol) + 
-                     tobacco:as.factor(mage_indicator) + 
-                     tobacco:as.factor(meduc_indicator) + 
-                     tobacco:as.factor(mblack) + 
-                     tobacco:as.factor(alcohol) +
                      as.factor(mage_indicator):as.factor(meduc_indicator) +
                      as.factor(mage_indicator):as.factor(mblack) +
                      as.factor(mage_indicator):as.factor(alcohol) +
                      as.factor(meduc_indicator):as.factor(mblack) +
                      as.factor(meduc_indicator):as.factor(alcohol) +
                      as.factor(mblack):as.factor(alcohol) +
-                     tobacco:as.factor(mage_indicator):as.factor(meduc_indicator) +
-                     tobacco:as.factor(mage_indicator):as.factor(mblack) +
-                     tobacco:as.factor(mage_indicator):as.factor(alcohol) +
                      as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(mblack) +
                      as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(alcohol) +
                      as.factor(meduc_indicator):as.factor(mblack):as.factor(alcohol) +
-                     )
-
-#matching TIA pull from TIA table 
+                     as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(mblack):as.factor(alcohol), 
+                   data = smoking_df)
 ```
 
-The estimated average treatment effect of smoking on birthweight using the exact matching estimator is -226.76 grams lower for maternal smoking during pregnancy. 
+```{r}
+huxtable::huxreg(mod_B)
+```
 
-It lin
+
+The linear regression analogue tells us that the the infants of mothers who smoke during pregnancy weigh 226.25 grams less than the infants of mothers who do not smoke during pregnancy.
 
 \newpage 
 
-\noindent (d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother’s age, mother’s age squared, mother’s education, and indicators for mother’s race, and alcohol consumption.
+## Part D
+
+\noindent Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother’s age, mother’s age squared, mother’s education, and indicators for mother’s race, and alcohol consumption.
 
 ```{r}
 # BASIC PROPENSITY SCORE --- THIS IS A TOY MODEL
