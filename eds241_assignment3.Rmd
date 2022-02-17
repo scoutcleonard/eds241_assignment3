@@ -31,7 +31,8 @@ packages=c("stargazer",
            "tibble",
            "here",
            "tidyverse",
-           "estimatr")
+           "estimatr",
+           "huxtable")
 
 for (i in packages) {
   if (require(i,character.only=TRUE)==FALSE) {
@@ -81,7 +82,7 @@ smoking_df <- read.csv(here("data", "SMOKING_EDS241.csv"))
 ```{r}
 mod_a1 <- lm_robust(birthwgt ~ tobacco, data = smoking_df)
 
-huxtable::huxreg(mod_a1)
+huxreg(mod_a1)
 ```
 
 \noindent The unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers is -244.5 grams. 
@@ -113,7 +114,7 @@ mod_B <- lm_robust(birthwgt ~ .,
 mod_B[[2]][[2]]
 ```
 
-\noindent The average treatment effect of maternal smoking on birth weight when all other covariants are held equal is -228.07 grams (on average, infants of mothers who use tobacco weigh 236.46 grams less than the infants of mothers who do not), with a standard error of 4.28.
+\noindent The average treatment effect of maternal smoking on birth weight when all other covariants are held equal is -228.07 grams (on average, infants of mothers who use tobacco weigh 236.46 grams less than the infants of mothers who do not), with a standard error of `r round(mod_b[[2]][[2]], digits = 2)`.
 
 \newpage
 
@@ -130,10 +131,11 @@ smoking_df <- smoking_df %>%
                                     mage < 34 ~ 0)) %>% 
   mutate(meduc_indicator = case_when(meduc >= 16 ~ 1,
                                      meduc < 16 ~ 0)) %>% 
-  mutate(g = paste0(as.factor(mage_indicator), 
-                    as.factor(meduc_indicator), 
-                    as.factor(mblack),
-                    as.factor(alcohol)))
+  mutate(g = paste0(mage_indicator, 
+                    meduc_indicator, 
+                    mblack,
+                    alcohol)) %>% 
+  mutate(g = as.factor(g))
 ```
 
 \noindent The code chunk below generates the linear regression analogue to estimate the effect of smoking on birth weight. 
@@ -141,20 +143,20 @@ smoking_df <- smoking_df %>%
 ```{r}
 #LINEAR REG ANALOGUE 
 mod_C <- lm_robust(birthwgt ~  tobacco +
-                     as.factor(mage_indicator) + 
-                     as.factor(meduc_indicator) + 
-                     as.factor(mblack) + 
-                     as.factor(alcohol) + 
-                     as.factor(mage_indicator):as.factor(meduc_indicator) +
-                     as.factor(mage_indicator):as.factor(mblack) +
-                     as.factor(mage_indicator):as.factor(alcohol) +
-                     as.factor(meduc_indicator):as.factor(mblack) +
-                     as.factor(meduc_indicator):as.factor(alcohol) +
-                     as.factor(mblack):as.factor(alcohol) +
-                     as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(mblack) +
-                     as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(alcohol) +
-                     as.factor(meduc_indicator):as.factor(mblack):as.factor(alcohol) +
-                     as.factor(mage_indicator):as.factor(meduc_indicator):as.factor(mblack):as.factor(alcohol), 
+                     mage_indicator + 
+                     meduc_indicator + 
+                     mblack + 
+                     alcohol + 
+                     mage_indicator:meduc_indicator +
+                     mage_indicator:mblack +
+                     mage_indicator:alcohol +
+                     meduc_indicator:mblack +
+                     meduc_indicator:alcohol +
+                     mblack:alcohol +
+                     mage_indicator:meduc_indicator:mblack +
+                     mage_indicator:meduc_indicator:alcohol +
+                     meduc_indicator:mblack:alcohol +
+                     mage_indicator:meduc_indicator:mblack:alcohol, 
                    data = smoking_df)
 ```
 
@@ -218,6 +220,8 @@ PS_WGT <- (smoking_df$tobacco/EPS) + ((1-smoking_df$tobacco)/(1-EPS))
 
 ```{r}
 wls1 <- lm_robust(birthwgt ~ tobacco, data = smoking_df, weights = PS_WGT)
+
+huxtable::huxreg(wls1)
 ```
 
-
+\noindent Using the propensity score weighted regression, the effect of maternal smoking in birth weight is that infants born to mothers who use tobacco during pregnancy weigh 225.48 grams less than infants born to mothers who do not use tobacco. 
