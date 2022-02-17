@@ -16,23 +16,28 @@ header-includes:
 knitr::opts_chunk$set(fig.width = 4, fig.height = 3, 
                       echo = TRUE, message = FALSE, warning = FALSE)
 
+# load packages, installing if missing
+if (!require(librarian)){
+  install.packages("librarian")
+  library(librarian)
+}
 
 # load packages
-packages=c("stargazer", 
-           "here", 
-           "tidyr", 
-           "dplyr",
-           "stringr", 
-           "janitor", 
-           "cowplot", 
-           "ggplot2", 
-           "tinytex", 
-           "datasets", 
-           "tibble",
-           "here",
-           "tidyverse",
-           "estimatr",
-           "huxtable")
+librarian::shelf("stargazer", 
+                 "here",
+                 "tidyr",
+                 "dplyr",
+                 "stringr",
+                 "janitor",
+                 "cowplot",
+                 "ggplot2",
+                 "tinytex",
+                 "datasets",
+                 "tibble",
+                 "here",
+                 "tidyverse",
+                 "estimatr",
+                 "knitr")
 
 for (i in packages) {
   if (require(i,character.only=TRUE)==FALSE) {
@@ -81,19 +86,40 @@ smoking_df <- read.csv(here("data", "SMOKING_EDS241.csv"))
 
 ```{r}
 mod_a1 <- lm_robust(birthwgt ~ tobacco, data = smoking_df)
-
-huxreg(mod_a1)
 ```
+
+```{r}
+#create table with regression results
+mod_a1_table <- tidy(mod_a1)
+
+mod_a1_table %>% 
+  select(term, estimate, std.error, p.value, conf.low, conf.high) %>%
+  kable()
+
+mod_a1_table
+```
+
 
 \noindent The unadjusted mean difference in birth weight of infants with smoking and non- smoking mothers is -244.5 grams. 
 
 \noindent This tells us about the effect of smoking on infant birth weight assuming that mothers who smoke and mothers who do are statistically different. 
 
 ```{r}
+#evidence against assumption regression
 mod_a2 <- lm_robust(meduc ~ tobacco, data = smoking_df)
-
-huxtable::huxreg(mod_a2)
 ```
+
+```{r}
+#create table with regression results
+mod_a2_table <- tidy(mod_a1)
+
+mod_a2_table %>% 
+  select(term, estimate, std.error, p.value, conf.low, conf.high) %>%
+  kable()
+
+mod_a2_table
+```
+
 
 \noindent Evidence against this hypothesis is shown in the code chunk above; when we regress tobacco usage on education, the results tell us that there is a significantly significant difference between the education levels of mothers who use tobacco during pregancy and those who do not. From this results, we know that mother's education is correlated with tobacco usage, but it is not included in our prediction of birthweights of infants of mothers who use tobacco above. This means there might be omitted variables bias, and the there may be additional variables interacting with the condition of tobacco use which are excluded. 
 
@@ -107,14 +133,22 @@ huxtable::huxreg(mod_a2)
 
 ```{r}
 #linear regression with birthweight conditional on all of the variables 
-mod_B <- lm_robust(birthwgt ~ ., 
+mod_b <- lm_robust(birthwgt ~ ., 
                    data = smoking_df)
-
-#standard error
-mod_B[[2]][[2]]
 ```
 
-\noindent The average treatment effect of maternal smoking on birth weight when all other covariants are held equal is -228.07 grams (on average, infants of mothers who use tobacco weigh 236.46 grams less than the infants of mothers who do not), with a standard error of `r round(mod_b[[2]][[2]], digits = 2)`.
+```{r}
+#create table with regression results
+mod_b_table <- tidy(mod_a1)
+
+mod_b_table %>% 
+  select(term, estimate, std.error, p.value, conf.low, conf.high) %>%
+  kable()
+
+mod_b_table
+```
+
+\noindent The average treatment effect of maternal smoking on birth weight when all other covariants are held equal is -228.07 grams (on average, infants of mothers who use tobacco weigh 236.46 grams less than the infants of mothers who do not), with a standard error of 4.14.
 
 \newpage
 
@@ -141,8 +175,8 @@ smoking_df <- smoking_df %>%
 \noindent The code chunk below generates the linear regression analogue to estimate the effect of smoking on birth weight. 
 
 ```{r}
-#LINEAR REG ANALOGUE 
-mod_C <- lm_robust(birthwgt ~  tobacco +
+#run linear regression analogue
+mod_c <- lm_robust(birthwgt ~  tobacco +
                      mage_indicator + 
                      meduc_indicator + 
                      mblack + 
@@ -162,13 +196,20 @@ mod_C <- lm_robust(birthwgt ~  tobacco +
 
 ```{r}
 #generate table of coefficients for mod_C
-huxtable::huxreg(mod_C)
+#create table with regression results
+mod_c_table <- tidy(mod_a1)
+
+mod_c_table %>% 
+  select(term, estimate, std.error, p.value, conf.low, conf.high) %>%
+  kable()
+
+mod_c_table
 ```
 
 \noindent The linear regression analogue tells us that the the infants of mothers who smoke during pregnancy weigh 226.25 grams less than the infants of mothers who do not smoke during pregnancy.
 
 ```{r}
-#EXACT MATCHING ESTIMATOR
+#exact mathcing estimator
 TIA_table <- smoking_df %>%
   group_by(g,tobacco) %>% 
   summarise(n_obs = n(),
@@ -209,6 +250,7 @@ smoking_df <- smoking_df %>%
 ps_model <- glm(tobacco ~ mage + mage_2 + meduc + mblack + alcohol, family = binomial(), data = smoking_df)
 
 EPS <- predict(ps_model, type = "response")
+
 PS_WGT <- (smoking_df$tobacco/EPS) + ((1-smoking_df$tobacco)/(1-EPS))
 ```
 
@@ -219,9 +261,20 @@ PS_WGT <- (smoking_df$tobacco/EPS) + ((1-smoking_df$tobacco)/(1-EPS))
 \noindent Use the propensity score weighted regression (WLS) to estimate the effect of maternal smoking on birth weight (Lecture 7, slide 12).
 
 ```{r}
+#run weighted regression
 wls1 <- lm_robust(birthwgt ~ tobacco, data = smoking_df, weights = PS_WGT)
-
-huxtable::huxreg(wls1)
 ```
+
+```{r}
+#create table with regression results
+wls1_table <- tidy(wls1)
+
+wls1_table %>% 
+  select(term, estimate, std.error, p.value, conf.low, conf.high) %>%
+  kable()
+
+wls1_table
+```
+
 
 \noindent Using the propensity score weighted regression, the effect of maternal smoking in birth weight is that infants born to mothers who use tobacco during pregnancy weigh 225.48 grams less than infants born to mothers who do not use tobacco. 
