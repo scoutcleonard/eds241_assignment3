@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.28)  15 FEB 2022 15:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.11.28)  16 FEB 2022 18:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -727,109 +727,35 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [1
 
-{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2]
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ##                                                           
-                                                                               
-                                                    Pr(>|t|)[] 
- []
+{/usr/local/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
+[4]
 
+LaTeX Warning: Float too large for page by 168.96999pt on input line 761.
 
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## (Intercept)         0.000000000000000000000000000000000000
-0000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## tobacco             0.000000000000000000000000000000000000
-0000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## mage                0.059444492347325454673079292433612863
-5331988334655761718750000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## meduc               0.000000000000000000000000000000000000
-0000072624386997872499283709106250529202989191231972294365181408760262130940592
-358362390671919844305512083289504826622007271907932590693235[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## as.factor(mblack)1  0.000000000000000000000000000000000000
-0000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## as.factor(alcohol)1 0.000000036065716065546634420458017465
-3135271611859025142621248960494995117187500000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## as.factor(first)1   0.000000000000000000000000000000000000
-0000000000000000000000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000002527605[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## as.factor(diabete)1 0.000000031623914495765821287740052246
-7646881707992179144639521837234497070312500000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000[] 
- []
-
-
-Overfull \hbox (580.24193pt too wide) in paragraph at lines 460--460
-[]\T1/lmtt/m/n/10 ## as.factor(anemia)1  0.788433752343045246568919992569135501
-9807815551757812500000000000000000000000000000000000000000000000000000000000000
-000000000000000000000000000000000000000000000000000000000000[] 
- []
-
-[3] [4]
-
-LaTeX Warning: Float too large for page by 168.96999pt on input line 823.
-
-[5]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-876.
-(/usr/local/texlive/2021/texmf-dist/tex/latex/lm/ts1lmtt.fd
-File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [6] [7] [8] (./eds241_assignment3.aux) ) 
+[5] [6] [7] [8] [9] (./eds241_assignment3.aux) ) 
 Here is how much of TeX's memory you used:
- 18338 strings out of 478994
- 314584 string characters out of 5858183
- 655053 words of memory out of 5000000
- 35350 multiletter control sequences out of 15000+600000
- 477184 words of font info for 134 fonts, out of 8000000 for 9000
+ 18309 strings out of 478994
+ 314016 string characters out of 5858183
+ 657089 words of memory out of 5000000
+ 35318 multiletter control sequences out of 15000+600000
+ 477045 words of font info for 135 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 85i,13n,88p,622b,879s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2021/texmf-dist/f
-onts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvip
-s/lm/lm-mathit.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec
-.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr
-/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/tex
-live/2021/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2021/
-texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2021/texmf-dist/
-fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1
-/public/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/
-lmri10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt10.pfb
-></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on eds241_assignment3.pdf (8 pages, 214384 bytes).
+ 85i,13n,88p,523b,769s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2021/texmf-
+dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc
+/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/lm/
+lm-ts1.enc}</usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx10.pfb
+></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/loc
+al/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive
+/2021/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2021/texmf
+-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/2021/texmf-dist/fonts
+/type1/public/lm/lmr17.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/publ
+ic/lm/lmri10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtt
+10.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
+Output written on eds241_assignment3.pdf (9 pages, 202378 bytes).
 PDF statistics:
- 129 PDF objects out of 1000 (max. 8388607)
- 108 compressed objects within 2 object streams
- 27 named destinations out of 1000 (max. 500000)
- 43057 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 136 PDF objects out of 1000 (max. 8388607)
+ 114 compressed objects within 2 object streams
+ 30 named destinations out of 1000 (max. 500000)
+ 43065 words of extra memory for PDF output out of 51595 (max. 10000000)
 
